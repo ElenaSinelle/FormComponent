@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useState,
+} from "react";
 
 interface FormData {
   firstName: string;
@@ -27,38 +31,13 @@ const Form: React.FC = () => {
     new Array(meals.length).fill(false),
   );
   const [photo, setPhoto] = useState<File | null>(null);
-  const [holidays, setHolidays] = useState(
+  const [holidays, setHolidays] = useState<string>(
     holidayChoices[0],
   );
   const [data, setData] = useState<FormData | null>(null);
-
-  const submitHandler = (
-    e: React.FormEvent<HTMLFormElement>,
-  ) => {
-    e.preventDefault();
-
-    const formData: FormData = {
-      firstName,
-      lastName,
-      tel,
-      gender,
-      checkedMeals: meals.filter((_, i) => checkedMeals[i]),
-      photo,
-      holidays,
-    };
-
-    localStorage.setItem("form", JSON.stringify(formData));
-
-    setData(formData);
-
-    setFirstName("");
-    setLastName("");
-    setTel("");
-    setGender("male");
-    setCheckedMeals(new Array(meals.length).fill(false));
-    setPhoto(null);
-    setHolidays(holidayChoices[0]);
-  };
+  const [photoPreview, setPhotoPreview] = useState<
+    string | undefined
+  >(undefined);
 
   const handleMealChange = (index: number) => {
     const updatedCheckedMeals = checkedMeals.map(
@@ -73,8 +52,55 @@ const Form: React.FC = () => {
     setHolidays(e.target.value);
   };
 
+  const handlePhoto = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setPhoto(e.target.files ? e.target.files[0] : null);
+  };
+
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+
+    photo
+      ? setPhotoPreview(URL.createObjectURL(photo))
+      : undefined;
+
+    const formData: FormData = {
+      firstName,
+      lastName,
+      tel,
+      gender,
+      checkedMeals: meals.filter((_, i) => checkedMeals[i]),
+      photo,
+      holidays,
+    };
+
+    localStorage.setItem("form", JSON.stringify(formData));
+
+    setData(formData);
+  };
+
+  const clearState = (): void => {
+    setFirstName("");
+    setLastName("");
+    setTel("");
+    setGender("male");
+    setCheckedMeals(new Array(meals.length).fill(false));
+    setPhoto(null);
+    setHolidays(holidayChoices[0]);
+    setPhotoPreview(undefined);
+  };
+
+  const handleReset = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    clearState();
+    setData(null);
+  };
+
   return (
-    <form onSubmit={submitHandler} action="#" method="get">
+    <form onSubmit={handleSubmit} action="#" method="get">
       <label>
         First Name*{" "}
         <input
@@ -142,17 +168,13 @@ const Form: React.FC = () => {
           type="file"
           name="photo"
           id="photo"
-          onChange={e =>
-            setPhoto(
-              e.target.files ? e.target.files[0] : null,
-            )
-          }
+          onChange={e => handlePhoto(e)}
           placeholder="Upload File"
         />
       </label>
 
       <label>
-        Favourite Meals
+        Favorite Meals
         {meals.map((meal, ind) => (
           <div key={ind}>
             <input
@@ -183,6 +205,10 @@ const Form: React.FC = () => {
       </label>
 
       <button type="submit">Submit</button>
+      <button type="reset" onClick={handleReset}>
+        Clear Form
+      </button>
+
       {data && (
         <div>
           <h2>Your Submitted Data:</h2>
@@ -191,14 +217,18 @@ const Form: React.FC = () => {
           <p>Phone Number: {data.tel}</p>
           <p>Gender: {data.gender}</p>
           <p>
-            Favourite Meals: {data.checkedMeals.join(", ")}
+            Favorite Meals: {data.checkedMeals.join(", ")}
           </p>
           <p>Holiday Choice: {data.holidays}</p>
           <p>
             Photo:{" "}
-            {data.photo
-              ? data.photo.name
-              : "No photo uploaded"}
+            {photoPreview && (
+              <img
+                src={photoPreview}
+                alt="Photo Preview"
+                style={{ width: "100px", height: "100px" }}
+              />
+            )}
           </p>
         </div>
       )}
