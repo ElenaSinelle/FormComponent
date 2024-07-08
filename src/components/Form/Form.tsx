@@ -3,6 +3,7 @@ import React, {
   FormEvent,
   useState,
 } from "react";
+import "./Form.css";
 
 interface FormData {
   firstName: string;
@@ -100,10 +101,16 @@ const Form: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} action="#" method="get">
+    <form
+      className="form"
+      onSubmit={handleSubmit}
+      action="#"
+      method="get"
+    >
       <label>
         First Name*{" "}
         <input
+          className="inputStyles"
           type="text"
           name="firstName"
           id="firstName"
@@ -117,6 +124,7 @@ const Form: React.FC = () => {
       <label>
         Last Name*{" "}
         <input
+          className="inputStyles"
           type="text"
           name="lastName"
           id="lastName"
@@ -130,6 +138,7 @@ const Form: React.FC = () => {
       <label>
         Phone Number*{" "}
         <input
+          className="inputStyles"
           type="tel"
           name="tel"
           id="tel"
@@ -140,7 +149,7 @@ const Form: React.FC = () => {
         />
       </label>
 
-      <label>
+      <label className="radioStyles">
         Gender
         <input
           type="radio"
@@ -162,7 +171,7 @@ const Form: React.FC = () => {
         Female
       </label>
 
-      <label>
+      <label className="fileStyles">
         Upload Your Photo
         <input
           type="file"
@@ -173,7 +182,7 @@ const Form: React.FC = () => {
         />
       </label>
 
-      <label>
+      <label className="checkboxStyles">
         Favorite Meals
         {meals.map((meal, ind) => (
           <div key={ind}>
@@ -190,7 +199,7 @@ const Form: React.FC = () => {
         ))}
       </label>
 
-      <label>
+      <label className="selectStyles">
         Your Holiday Choice
         <select
           value={holidays}
@@ -204,14 +213,22 @@ const Form: React.FC = () => {
         </select>
       </label>
 
-      <button type="submit">Submit</button>
-      <button type="reset" onClick={handleReset}>
+      <button className="button" type="submit">
+        Submit
+      </button>
+      <button
+        className="button"
+        type="reset"
+        onClick={handleReset}
+      >
         Clear Form
       </button>
 
       {data && (
-        <div>
-          <h2>Your Submitted Data:</h2>
+        <div className="data">
+          <h2 className="dataTitle">
+            Your Submitted Data:
+          </h2>
           <p>First Name: {data.firstName}</p>
           <p>Last Name: {data.lastName}</p>
           <p>Phone Number: {data.tel}</p>
@@ -221,13 +238,15 @@ const Form: React.FC = () => {
           </p>
           <p>Holiday Choice: {data.holidays}</p>
           <p>
-            Photo:{" "}
             {photoPreview && (
-              <img
-                src={photoPreview}
-                alt="Photo Preview"
-                style={{ width: "100px", height: "100px" }}
-              />
+              <>
+                <span>Photo: </span>
+                <img
+                  src={photoPreview}
+                  alt="Photo Preview"
+                  className="photoPreview"
+                />
+              </>
             )}
           </p>
         </div>
