@@ -229,8 +229,8 @@ const Form: React.FC = () => {
           <h2 className="dataTitle">
             Your Submitted Data:
           </h2>
-          <p>First Name: {data.firstName}</p>
-          <p>Last Name: {data.lastName}</p>
+          <p>First Name: {data.firstName.toUpperCase()}</p>
+          <p>Last Name: {data.lastName.toUpperCase()}</p>
           <p>Phone Number: {data.tel}</p>
           <p>Gender: {data.gender}</p>
           <p>
