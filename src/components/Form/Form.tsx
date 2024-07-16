@@ -24,10 +24,10 @@ const holidayChoices: string[] = [
 ];
 
 const Form: React.FC = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [tel, setTel] = useState("");
-  const [gender, setGender] = useState("male");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [tel, setTel] = useState<string>("");
+  const [gender, setGender] = useState<string>("male");
   const [checkedMeals, setCheckedMeals] = useState(
     new Array(meals.length).fill(false),
   );
